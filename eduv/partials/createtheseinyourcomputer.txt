@@ -1,0 +1,351 @@
+-- Create the users table
+CREATE TABLE users (
+    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the blogs table
+CREATE TABLE blogs (
+    blog_id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the quiz_questions table
+CREATE TABLE quiz_questions (
+    question_id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    blog_id INT(11) NOT NULL,
+    question VARCHAR(255) NOT NULL,
+    option1 VARCHAR(100) NOT NULL,
+    option2 VARCHAR(100) NOT NULL,
+    option3 VARCHAR(100) NOT NULL,
+    option4 VARCHAR(100) NOT NULL,
+    correct_option INT(11) NOT NULL,
+    FOREIGN KEY (blog_id) REFERENCES blogs(blog_id) ON DELETE CASCADE
+);
+
+-- Create the results table
+CREATE TABLE results (
+    result_id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    user_id INT(11) NOT NULL,
+    quiz_title VARCHAR(50) NOT NULL,
+    score INT(11) NOT NULL,
+    total_questions INT(11) NOT NULL,
+    quiz_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+INSERT INTO blogs (blog_id, title, description, created_at) VALUES
+(1, 'Science', '<article>
+                <h3>The Fundamentals of Physics</h3>
+                <p>Physics explores the principles governing the universe, from the tiniest particles to massive galaxies. Classical mechanics, developed by Isaac Newton, explains the motion of objects and introduces concepts like force, mass, and acceleration. Quantum mechanics, on the other hand, dives into the behavior of particles at an atomic level, revealing counterintuitive phenomena that challenge our everyday understanding of reality. These two branches of physics provide a foundation for technological advancements, from electricity generation to space exploration.</p>
+                <p>Other important topics include thermodynamics, which studies heat and energy transfer, and electromagnetism, which combines electricity and magnetism to explain phenomena like light and radiation. Understanding these fundamentals gives us insight into how energy powers everything around us.</p>
+            </article>
+
+            <article>
+                <h3>The Building Blocks of Chemistry</h3>
+                <p>Chemistry studies matter, its composition, and the reactions that transform it. The periodic table organizes elements based on their properties, providing a roadmap for understanding chemical behavior. Concepts such as atomic structure, bonding, and reactions explain how substances interact. For example, water (H₂O) forms when hydrogen and oxygen atoms bond in a fixed ratio, a principle that extends to countless compounds.</p>
+                <p>Organic chemistry focuses on carbon-based compounds, crucial for life, while inorganic chemistry explores metals, minerals, and other non-organic substances. Chemistry not only explains natural processes like digestion but also enables innovations in medicine, agriculture, and materials science.</p>
+            </article>
+
+            <article>
+                <h3>Biology: The Science of Life</h3>
+                <p>Biology examines living organisms, from single-celled bacteria to complex human beings. The cell is the basic unit of life, and genetics explains how traits are passed through DNA. Charles Darwin’s theory of evolution describes how species adapt to their environments over generations, a concept fundamental to our understanding of biodiversity.</p>
+                <p>Major branches of biology include ecology, which studies ecosystems and their interactions, and physiology, which examines bodily functions. Advances in biology, such as genetic engineering and biotechnology, are expanding our potential to address challenges in healthcare, environmental conservation, and agriculture.</p>
+            </article>
+
+            <article>
+                <h3>Earth and Space Science</h3>
+                <p>Earth science explores our planet’s physical structure, atmosphere, and processes. Topics such as plate tectonics, the water cycle, and climate systems help us understand natural phenomena like earthquakes and weather patterns. Space science expands this perspective, studying celestial bodies and the universe as a whole.</p>
+                <p>With space exploration, we’ve gained knowledge of planets, stars, and galaxies. Key discoveries, such as the Big Bang theory and black holes, deepen our understanding of cosmic origins and mysteries. This field not only satisfies human curiosity but also drives innovation in areas like satellite technology and environmental monitoring.</p>
+            </article>', '2024-11-05 01:20:56'),
+(2, 'PHP', '<article>
+                <h3>Introduction to PHP</h3>
+                <p>PHP is a server-side scripting language designed for web development but also used as a general-purpose language. It powers many dynamic websites and applications across the internet.</p>
+            </article>
+
+            <article>
+                <h3>How PHP Works with HTML</h3>
+                <p>PHP can be embedded within HTML to create dynamic content. Here's a basic example of using PHP within HTML to display text:</p>
+                <pre><code>&lt;?php echo "Hello, World!"; ?&gt;</code></pre>
+            </article>
+
+            <article>
+                <h3>Basic Syntax</h3>
+                <p>PHP code starts with <code>&lt;?php</code> and ends with <code>?&gt;</code>. Statements end with a semicolon, and comments can be written using <code>//</code> or <code>/* */</code>.</p>
+            </article>
+
+            <article>
+                <h3>Variables and Data Types</h3>
+                <p>PHP variables start with a <code>$</code> symbol and are loosely typed. Common data types include <strong>strings</strong>, <strong>integers</strong>, <strong>booleans</strong>, and <strong>arrays</strong>.</p>
+                <pre><code>$name = "EduVentures"; // string
+$age = 20; // integer
+$isStudent = true; // boolean
+$subjects = array("PHP", "HTML", "CSS"); // array</code></pre>
+            </article>
+
+            <article>
+                <h3>Control Structures</h3>
+                <p>PHP uses common control structures like <strong>if</strong>, <strong>else</strong>, <strong>switch</strong>, and <strong>loops</strong> for handling conditions and iterations:</p>
+                <pre><code>if ($age &gt;= 18) {
+    echo "You are an adult.";
+} else {
+    echo "You are a minor.";
+}</code></pre>
+            </article>
+
+            <article>
+                <h3>Functions</h3>
+                <p>Functions allow you to create reusable blocks of code. Here’s an example:</p>
+                <pre><code>function greet($name) {
+    return "Hello, " . $name . "!";
+}
+echo greet("EduVentures");</code></pre>
+            </article>
+
+            <article>
+                <h3>Form Validation Basics</h3>
+                <p>Form validation is essential for securing and managing user input. A typical function for sanitizing data looks like this:</p>
+                <pre><code>function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}</code></pre>
+                <p>This function removes whitespace, slashes, and converts special characters to prevent XSS attacks.</p>
+            </article>
+
+            <article>
+                <h3>Connecting to a Database</h3>
+                <p>PHP often interacts with databases, especially MySQL, for storing and retrieving data. You can connect using:</p>
+                <pre><code>$conn = new mysqli("localhost", "username", "password", "database");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}</code></pre>
+                <p>Always handle connection errors to improve your app's stability.</p>
+            </article>
+
+            <article>
+                <h3>Using Sessions in PHP</h3>
+                <p>Sessions store user-specific information across pages. Start a session with <code>session_start()</code> and use session variables to track user data.</p>
+                <pre><code>session_start();
+$_SESSION["username"] = "EduVenturesUser";</code></pre>
+            </article>', '2024-11-05 01:20:56'),
+(3, 'General knowledge', ' <article>
+                <h3>World Geography and Key Facts</h3>
+                <p>Geography shapes our understanding of the world, from continents and countries to natural features that define landscapes. Knowing major rivers, mountain ranges, and the layout of continents is essential for a comprehensive worldview. For instance, the Amazon River, stretching across multiple South American countries, is the largest river by volume in the world. Similarly, Mount Everest stands as the highest peak on Earth, located in the Himalayas between Nepal and China.</p>
+                <p>Understanding time zones, climate zones, and global positioning also helps us grasp how geography affects weather patterns, agriculture, and trade. The equatorial zone, for example, experiences consistent temperatures year-round, whereas the polar regions face extreme seasons.</p>
+            </article>
+
+            <article>
+                <h3>Historical Events and Figures</h3>
+                <p>History is filled with key figures and events that shaped civilizations. From leaders like Alexander the Great and Mahatma Gandhi to events such as the French Revolution and World Wars, understanding history enables us to learn from past successes and mistakes. For instance, Mahatma Gandhi's nonviolent resistance led to India’s independence from British rule, while the World Wars catalyzed major geopolitical changes globally.</p>
+                <p>Studying these figures and events reveals how diverse movements—whether political, social, or cultural—have contributed to the formation of modern societies. For example, the Industrial Revolution introduced machinery to manufacturing, drastically changing economies and lifestyles in Europe and beyond.</p>
+            </article>', '2024-11-05 01:20:56'),
+(4, 'History', '<article>
+    <h3>The Birth of Civilization</h3>
+    <p>The advent of civilization marked a turning point in human history, transitioning from nomadic lifestyles to settled societies. Mesopotamia, often called the "Cradle of Civilization," introduced writing, governance, and agriculture. Similarly, Egypt, the Indus Valley, and China pioneered advancements that laid the foundation for modern society. Understanding this era highlights how innovation and cooperation shaped early human progress.</p>
+</article>
+
+<article>
+    <h3>The Medieval Era</h3>
+    <p>The medieval period, spanning from the 5th to the 15th century, was a time of transformation. Feudalism defined the social structure, while castles symbolized power and defense. This era also saw the rise of the Church's influence, territorial wars, and cultural exchanges through events like the Crusades. The Middle Ages were crucial in shaping modern governance and culture.</p>
+</article>
+
+<article>
+    <h3>Renaissance and Enlightenment</h3>
+    <p>The Renaissance, or "rebirth," heralded a cultural and intellectual revival across Europe. Artists like Leonardo da Vinci and Michelangelo revolutionized art, while scientists like Galileo and Copernicus challenged traditional beliefs. The Enlightenment followed, emphasizing reason, science, and individual rights, paving the way for democratic ideals and modern scientific inquiry.</p>
+</article>
+
+<article>
+    <h3>The Age of Revolutions</h3>
+    <p>From the 18th century onwards, revolutions reshaped nations. The American and French revolutions championed democracy, liberty, and equality, while the Industrial Revolution transformed economies with mechanization and urbanization. These events catalyzed political, social, and technological changes that continue to influence the world today.</p>
+</article>
+
+<article>
+    <h3>World Wars and Global Shifts</h3>
+    <p>The 20th century was defined by global conflicts like World Wars I and II. These wars reshaped geopolitical boundaries and introduced institutions like the United Nations to promote peace. The Cold War era further divided the world but also spurred technological and space race advancements, influencing global politics and culture.</p>
+</article>
+
+<article>
+    <h3>Modern Globalization</h3>
+    <p>Modern globalization connects economies, cultures, and technologies like never before. Events like the digital revolution and the rise of global organizations have fostered unprecedented international collaboration. However, this era also faces challenges such as climate change, cultural homogenization, and geopolitical tensions, emphasizing the need for sustainable progress and diplomacy.</p>
+</article>
+', '2024-11-05 01:20:56'),
+(5, 'Mathematics', '<article>
+                <h3>Algebra Basics</h3>
+                <p>Algebra forms the foundation of many mathematical concepts, involving symbols, equations, and the rules that govern them. Master the basics of variables, expressions, and linear equations, which serve as the building blocks for solving complex problems. For example, understanding how to simplify expressions and solve for unknowns is crucial in both academics and real-world scenarios, like calculating finances or solving engineering puzzles.</p>
+            </article>
+
+            <article>
+                <h3>Geometry and Shapes</h3>
+                <p>Geometry is the study of shapes, sizes, and the properties of space. Dive into the fundamentals of angles, triangles, circles, and polygons. This knowledge extends beyond theory, applying to art, architecture, and even nature. Learning the relationships between different shapes helps in understanding symmetry, proportions, and how objects fit together in space, making it essential for fields like design and construction.</p>
+            </article>
+
+            <article>
+                <h3>Calculus Concepts</h3>
+                <p>Calculus explores change, motion, and rates of change through derivatives and integrals. Discover how calculus provides tools to analyze dynamic systems, from the growth of populations to the speed of falling objects. Differential calculus focuses on rates of change, while integral calculus covers accumulation of quantities, both of which have applications in physics, economics, and engineering.</p>
+            </article>
+
+            <article>
+                <h3>Trigonometry</h3>
+                <p>Trigonometry delves into the relationships between angles and sides of triangles, fundamental in fields such as engineering, physics, and computer graphics. Learn about sine, cosine, and tangent, and how these functions apply to real-life scenarios like navigation, sound waves, and construction. Trigonometry is key to understanding periodic patterns and circular motion.</p>
+            </article>
+
+            <article>
+                <h3>Statistics and Probability</h3>
+                <p>Statistics and probability allow us to interpret data and make predictions. Learn how to calculate averages, understand distributions, and apply probability to assess risks. These skills are vital in data science, research, and everyday decision-making, such as understanding trends, forecasting outcomes, or evaluating the likelihood of certain events.</p>
+            </article>
+
+            <article>
+                <h3>Mathematical Proofs</h3>
+                <p>Proofs are the backbone of mathematics, providing logical explanations to validate concepts and theorems. Explore methods of deduction, induction, and contradiction to build airtight arguments. This skill fosters a rigorous, systematic approach to problem-solving, which is valuable in fields that require precise thinking, such as computer science, philosophy, and law.</p>
+            </article>', '2024-11-05 01:20:56'),
+(6, 'JavaScript', '<article>
+                <h3>Introduction to JavaScript</h3>
+                <p>JavaScript is a versatile, high-level programming language primarily used for web development. It allows developers to create dynamic and interactive web applications.</p>
+            </article>
+
+            <article>
+                <h3>JavaScript Syntax</h3>
+                <p>JavaScript syntax is the set of rules that define a correctly structured JavaScript program. Code statements end with a semicolon, and you can use braces to define code blocks.</p>
+                <pre><code>if (condition) {
+    // code to be executed
+}</code></pre>
+            </article>
+
+            <article>
+                <h3>Variables and Data Types</h3>
+                <p>Variables in JavaScript can be declared using <code>var</code>, <code>let</code>, or <code>const</code>. JavaScript has dynamic typing, meaning variables can hold any type of data:</p>
+                <pre><code>let name = "EduVentures"; // string
+const age = 20; // number
+var isStudent = true; // boolean</code></pre>
+            </article>
+
+            <article>
+                <h3>Control Structures</h3>
+                <p>JavaScript uses control structures like <strong>if</strong>, <strong>else</strong>, and loops (<strong>for</strong>, <strong>while</strong>) to control the flow of execution:</p>
+                <pre><code>if (age &gt;= 18) {
+    console.log("You are an adult.");
+} else {
+    console.log("You are a minor.");
+}</code></pre>
+            </article>
+
+            <article>
+                <h3>Functions</h3>
+                <p>Functions are reusable blocks of code that can take parameters and return values. You can define a function as follows:</p>
+                <pre><code>function greet(name) {
+    return "Hello, " + name + "!";
+}
+console.log(greet("EduVentures"));</code></pre>
+            </article>
+
+            <article>
+                <h3>Event Handling</h3>
+                <p>JavaScript can respond to user events such as clicks and keyboard input. You can add event listeners to elements:</p>
+                <pre><code>document.getElementById("myButton").addEventListener("click", function() {
+    alert("Button clicked!");
+});</code></pre>
+            </article>
+
+            <article>
+                <h3>Working with Arrays</h3>
+                <p>Arrays in JavaScript are used to store multiple values in a single variable. You can access array elements using their index:</p>
+                <pre><code>let fruits = ["Apple", "Banana", "Cherry"];
+console.log(fruits[0]); // Output: Apple</code></pre>
+            </article>
+
+            <article>
+                <h3>JSON: JavaScript Object Notation</h3>
+                <p>JSON is a lightweight data interchange format that is easy to read and write. It is commonly used to send data between a server and a client:</p>
+                <pre><code>let jsonData = '{"name": "EduVentures", "age": 20}';
+let obj = JSON.parse(jsonData);
+console.log(obj.name); // Output: EduVentures</code></pre>
+            </article>
+
+            <article>
+                <h3>Asynchronous JavaScript: Promises and Fetch API</h3>
+                <p>JavaScript handles asynchronous operations using promises. The Fetch API is used to make network requests:</p>
+                <pre><code>fetch("https://api.example.com/data")
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error("Error:", error));</code></pre>
+            </article>
+', '2024-11-05 05:20:56');
+
+
+INSERT INTO quiz_questions (blog_id, question, option1, option2, option3, option4, correct_option) VALUES
+(1, 'What is the primary source of energy for the Earth?', 'The Sun', 'The Moon', 'The Stars', 'The Oceans', 1),
+(1, 'Which gas is most abundant in the Earth’s atmosphere?', 'Oxygen', 'Hydrogen', 'Nitrogen', 'Carbon Dioxide', 3),
+(1, 'What is H2O commonly known as?', 'Salt', 'Water', 'Oxygen', 'Hydrogen', 2),
+(1, 'Which planet is known as the Red Planet?', 'Earth', 'Mars', 'Jupiter', 'Venus', 2),
+(1, 'What is the symbol for Iron?', 'Ir', 'In', 'Fe', 'I', 3),
+(1, 'Who is known as the father of physics?', 'Isaac Newton', 'Albert Einstein', 'Galileo Galilei', 'Nikola Tesla', 1),
+(1, 'What is the chemical formula for Carbon Dioxide?', 'CO', 'CO2', 'C2O', 'O2', 2),
+(1, 'Which process do plants use to make their food?', 'Photosynthesis', 'Respiration', 'Digestion', 'Evaporation', 1),
+(1, 'What is the boiling point of water at sea level?', '90°C', '100°C', '110°C', '120°C', 2),
+(1, 'How many bones are there in a typical human adult?', '204', '206', '208', '210', 2),
+(2, 'What does PHP stand for?', 'Personal Home Page', 'PHP: Hypertext Preprocessor', 'Private Home Page', 'Programming Home Page', 2),
+(2, 'Which of the following is a valid variable name in PHP?', '1st_variable', '_variable1', 'variable-1', 'variable 1', 2),
+(2, 'How do you create an array in PHP?', '$arr = array();', '$arr = [];', 'Both of the above', 'None of the above', 3),
+(2, 'Which of the following functions is used to include files in PHP?', 'include()', 'require()', 'include_once()', 'All of the above', 4),
+(2, 'What is the correct way to comment in PHP?', '// Comment', '/* Comment */', '# Comment', 'All of the above', 4),
+(2, 'Which superglobal array in PHP is used to access form data?', '$_GET', '$_POST', '$_REQUEST', 'All of the above', 4),
+(2, 'What will be the output of the following PHP code: echo "10 apples";?', '15', '510', 'Error', '10 apples', 4),
+(2, 'How can you start a session in PHP?', 'session_start();', 'start_session();', 'begin_session();', 'session();', 1),
+(2, 'Which of the following is used to connect to a MySQL database?', 'mysqli_connect()', 'mysql_connect()', 'pdo_connect()', 'All of the above', 1),
+(2, 'What is the purpose of the isset() function in PHP?', 'To check if a variable is set', 'To check if a variable is empty', 'To check if a variable is null', 'None of the above', 1),
+(3, 'What is the capital of France?', 'Berlin', 'Madrid', 'Paris', 'Lisbon', 3),
+(3, 'Who wrote the play "Romeo and Juliet"?', 'Charles Dickens', 'William Shakespeare', 'Mark Twain', 'Jane Austen', 2),
+(3, 'Which planet is known as the Blue Planet?', 'Mars', 'Earth', 'Venus', 'Jupiter', 2),
+(3, 'What is the largest ocean on Earth?', 'Indian Ocean', 'Atlantic Ocean', 'Arctic Ocean', 'Pacific Ocean', 4),
+(3, 'Who was the first President of the United States?', 'Abraham Lincoln', 'George Washington', 'Thomas Jefferson', 'John Adams', 2),(3, 'Who was the first woman Prime Minister of India?', 'Indira Gandhi', 'Sarojini Naidu', 'Pratibha Patil', 'Sonia Gandhi', 1),
+(3, 'What is the smallest planet in our solar system?', 'Earth', 'Mars', 'Mercury', 'Venus', 3),
+(3, 'Who is the author of the Indian National Anthem?', 'Rabindranath Tagore', 'Bankim Chandra Chatterjee', 'Sarojini Naidu', 'Mahatma Gandhi', 1),
+(3, 'In which year did India gain independence?', '1945', '1947', '1950', '1952', 2),
+(3, 'Which river is known as the longest river in India?', 'Ganges', 'Brahmaputra', 'Yamuna', 'Godavari', 1);
+
+
+INSERT INTO quiz_questions (blog_id, question, option1, option2, option3, option4, correct_option) VALUES
+(4, 'Who discovered America?', 'Christopher Columbus', 'Leif Erikson', 'Amerigo Vespucci', 'James Cook', 1),
+(4, 'In which year did World War II end?', '1943', '1944', '1945', '1946', 3),
+(4, 'Who was the first emperor of the Roman Empire?', 'Julius Caesar', 'Augustus', 'Nero', 'Caligula', 2),
+(4, 'What was the name of the ship on which the Pilgrims traveled to America?', 'The Mayflower', 'The Santa Maria', 'The Beagle', 'The Nina', 1),
+(4, 'Who was the first female Prime Minister of the United Kingdom?', 'Margaret Thatcher', 'Queen Elizabeth I', 'Theresa May', 'Angela Merkel', 1),
+(4, 'What ancient civilization built the pyramids?', 'The Romans', 'The Greeks', 'The Egyptians', 'The Mesopotamians', 3),
+(4, 'Who was known as the "Iron Chancellor"?', 'Otto von Bismarck', 'Napoleon Bonaparte', 'Winston Churchill', 'Mao Zedong', 1),
+(4, 'In which year did the French Revolution begin?', '1787', '1788', '1789', '1790', 3),
+(4, 'What was the ancient name of Iraq?', 'Persia', 'Babylon', 'Mesopotamia', 'Byzantium', 3),
+(4, 'Who was the author of the Communist Manifesto?', 'Karl Marx', 'Vladimir Lenin', 'Friedrich Engels', 'Joseph Stalin', 1);
+
+INSERT INTO quiz_questions (blog_id, question, option1, option2, option3, option4, correct_option) VALUES
+(5, 'What is the value of pi (π) to two decimal places?', '3.14', '3.15', '3.16', '3.17', 1),
+(5, 'What is the square root of 144?', '10', '11', '12', '13', 3),
+(5, 'What is the formula for the area of a circle?', 'πr^2', '2πr', 'πd', 'πr', 1),
+(5, 'What is 15% of 200?', '25', '30', '35', '40', 2),
+(5, 'What is the result of 9 * 9?', '72', '81', '89', '90', 2),
+(5, 'Solve for x: 2x + 6 = 14', 'x = 3', 'x = 4', 'x = 5', 'x = 6', 2),
+(5, 'What is 2 raised to the power of 5?', '10', '16', '32', '64', 3),
+(5, 'If a triangle has sides 3, 4, and 5, it is a:', 'Scalene triangle', 'Right triangle', 'Isosceles triangle', 'Equilateral triangle', 2),
+(5, 'What is the sum of the angles in a triangle?', '90°', '180°', '270°', '360°', 2),
+(5, 'Which property is used in the equation a(b + c) = ab + ac?', 'Distributive property', 'Associative property', 'Commutative property', 'Identity property', 1);
+
+
+
+INSERT INTO quiz_questions (blog_id, question, option1, option2, option3, option4, correct_option) VALUES
+(6, 'What is the correct syntax to output "Hello World" in JavaScript?', 'console.log("Hello World");', 'print("Hello World");', 'echo "Hello World";', 'document.write("Hello World");', 1),
+(6, 'Which of the following is a JavaScript data type?', 'String', 'Number', 'Boolean', 'All of the above', 4),
+(6, 'How do you create a function in JavaScript?', 'function myFunction() {}', 'create myFunction() {}', 'function:myFunction() {}', 'myFunction() = function {}', 1),
+(6, 'Which symbol is used for comments in JavaScript?', '//', '#', '/*', '*/', 1),
+(6, 'What will the following code output: console.log(typeof NaN);', 'number', 'NaN', 'undefined', 'error', 1),
+(6, 'Which method is used to convert a JSON string into a JavaScript object?', 'JSON.parse()', 'JSON.stringify()', 'JSON.convert()', 'JSON.object()', 1),
+(6, 'Which event occurs when the user clicks on an HTML element?', 'onclick', 'onchange', 'onmouseover', 'onkeypress', 1),
+(6, 'How can you declare a variable in JavaScript?', 'var myVar;', 'dim myVar;', 'let myVar;', 'All of the above', 4),
+(6, 'What does the "this" keyword refer to in JavaScript?', 'The current object', 'The previous object', 'The global object', 'The function itself', 1),
+(6, 'Which of the following is not a JavaScript framework?', 'Angular', 'React', 'Django', 'Vue', 3);
+
+
